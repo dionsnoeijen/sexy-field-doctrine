@@ -142,7 +142,11 @@ class DoctrineOneToManyGeneratorTest extends TestCase
         $this->assertInstanceOf(Template::class, $generated);
 
         $expected = <<<EOT
-<one-to-many field="thats_666" target-entity="nameFromSpace\Entity\ToBeMapped" mapped-by="mapper" />
+<one-to-many field="thats_666" target-entity="nameFromSpace\Entity\ToBeMapped" mapped-by="mapper">
+    <cascade>
+        <cascade-all/>
+    </cascade>
+</one-to-many>
 
 EOT;
 

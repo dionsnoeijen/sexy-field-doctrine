@@ -140,9 +140,17 @@ class DoctrineManyToOneGeneratorTest extends TestCase
         );
         $this->assertNotEmpty($generated);
         $this->assertInstanceOf(Template::class, $generated);
-        $this->assertStringStartsWith(
-            '<many-to-one field="that_123" target-entity="nameFromSpace\Entity\ToBeMapped" inversed-by="mappers_37">',
-            (string) $generated
-        );
+
+        $expected = <<<EOT
+<many-to-one field="that_123" target-entity="nameFromSpace\Entity\ToBeMapped" inversed-by="mappers_37">
+    <cascade>
+        <cascade-all/>
+    </cascade>
+    <join-column name="that_123_id" referenced-column-name="id" />
+</many-to-one>
+
+EOT;
+
+        $this->assertEquals($expected, (string)$generated);
     }
 }
