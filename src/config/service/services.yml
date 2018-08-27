@@ -32,3 +32,13 @@ services:
       - '@doctrine.orm.entity_manager'
 
   section_field.doctrine.delete.section: '@Tardigrades\SectionField\Service\DoctrineSectionDeleter'
+
+  Tardigrades\SectionField\QueryComponents\TransformResults:
+
+  Tardigrades\SectionField\QueryComponents\QueryStructure:
+
+  Tardigrades\SectionField\Service\QuerySectionReader:
+    arguments:
+      - '@doctrine.orm.entity_manager'
+      - '@Tardigrades\SectionField\QueryComponents\QueryStructure'
+      - '@Tardigrades\SectionField\QueryComponents\TransformResults'
