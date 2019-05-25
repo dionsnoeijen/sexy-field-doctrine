@@ -42,17 +42,21 @@ class DoctrineConfigGenerator extends Generator implements GeneratorInterface
         $this->section = $section;
         $this->sectionConfig = $section->getConfig();
 
-        $ignored = false;
-        try {
-            $ignored = $this->sectionConfig->toArray()['section']['generator']['doctrine']['ignore'];
-        } catch (\Throwable $throwable) {}
+        $ignored = $this->sectionConfig->toArray()['section']['generator']['doctrine']['ignore'] ?? false;
         if ($ignored) {
             throw new IgnoredSectionException();
         }
 
+        $uniqueConstraint = $this->sectionConfig->toArray()['section']['generator']['doctrine']['uniqueConstraint'] ??
+            null;
+
         $this->initializeTemplates();
 
         $fields = $this->fieldManager->readByHandles($this->sectionConfig->getFields());
+
+        if ($uniqueConstraint) {
+            $this->generateUniqueConstraints($uniqueConstraint, $fields);
+        }
 
         $this->generateElements($fields);
 
@@ -122,7 +126,8 @@ class DoctrineConfigGenerator extends Generator implements GeneratorInterface
             'manyToOne' => [],
             'oneToMany' => [],
             'oneToOne' => [],
-            'manyToMany' => []
+            'manyToMany' => [],
+            'uniqueConstraints' => []
         ];
     }
 
@@ -133,6 +138,29 @@ class DoctrineConfigGenerator extends Generator implements GeneratorInterface
             $combined .= $template;
         }
         return $combined;
+    }
+
+    private function generateUniqueConstraints(array $uniqueFields, array $allFields): void
+    {
+        $handles = [];
+        foreach ($allFields as $field) {
+            if ((string)$field->getFieldType()->getType() === 'Relationship') {
+                $handles[] = $field->getConfig()->getRelationshipTo() . '_id';
+            } else {
+                $handles[] = (string)$field->getHandle();
+            }
+        }
+
+        foreach ($uniqueFields as $field) {
+            if (!in_array($field, $handles)) {
+                $this->buildMessages[] = 'Unique field ' . $field . ' not found in fields of section';
+                break;
+            }
+        }
+
+        $unique = (string) TemplateLoader::load(__DIR__ . '/GeneratorTemplate/doctrine.unique.xml.template');
+        $unique = str_replace('{{ columns }}', implode(',', $uniqueFields), $unique);
+        $this->templates['uniqueConstraints'] = [$unique];
     }
 
     private function generateXml(): Template

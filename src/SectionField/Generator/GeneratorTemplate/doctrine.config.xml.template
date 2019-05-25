@@ -6,6 +6,8 @@
         name="{{ fullyQualifiedClassName }}"
         table="{{ handle }}"
     >
+        {{ uniqueConstraints }}
+
         <lifecycle-callbacks>
             <lifecycle-callback type="prePersist" method="onPrePersist" />
             <lifecycle-callback type="preUpdate" method="onPreUpdate" />

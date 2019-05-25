@@ -11,6 +11,7 @@ use Tardigrades\Entity\Field;
 use Tardigrades\Entity\FieldType;
 use Tardigrades\Entity\FieldTypeInterface;
 use Tardigrades\Entity\Section;
+use Tardigrades\FieldType\Generator\DoctrineFieldGenerator;
 use Tardigrades\FieldType\Relationship\Generator\DoctrineOneToOneGenerator;
 use Tardigrades\SectionField\Generator\Writer\Writable;
 use Tardigrades\SectionField\Service\FieldManagerInterface;
@@ -23,8 +24,8 @@ use Tardigrades\SectionField\ValueObject\SectionConfig;
 use Tardigrades\SectionField\ValueObject\Type;
 
 /**
- * @coversDefaultClass Tardigrades\SectionField\Generator\DoctrineConfigGenerator
- * @covers ::<private>
+ * @coversDefaultClass \Tardigrades\SectionField\Generator\DoctrineConfigGenerator
+ * @covers ::<<private>>
  * @covers ::__construct
  */
 final class DoctrineConfigGeneratorTest extends TestCase
@@ -62,7 +63,6 @@ final class DoctrineConfigGeneratorTest extends TestCase
 
     /**
      * @test
-     * @covers ::generateElements
      * @covers ::generateBySection
      */
     public function it_should_generate_by_a_section_from_template()
@@ -86,7 +86,7 @@ final class DoctrineConfigGeneratorTest extends TestCase
         $fieldType->shouldReceive('getType')->andReturn(Type::fromString('EmailType'));
         $fieldType->shouldReceive('directory')->andReturn(__DIR__ . '/../../../../src/FieldType/Relationship');
 
-        $fieldOne = $this->givenAFieldWithNameKindAndTo('One', 'one-to-one', 'Two');
+        $fieldOne = $this->givenARelationshipFieldWithNameKindAndTo('One', 'one-to-one', 'Two');
 
         $this->fieldManager->shouldReceive('readByHandles')
             ->once()
@@ -132,7 +132,6 @@ EOT;
 
     /**
      * @test
-     * @covers ::generateElements
      * @covers ::generateBySection
      */
     public function it_should_fail_generating_with_a_nonexistent_class()
@@ -156,7 +155,7 @@ EOT;
         $fieldType->shouldReceive('getType')->andReturn(Type::fromString('EmailType'));
         $fieldType->shouldReceive('directory')->andReturn(__DIR__ . '/../../../../src/FieldType/Relationship');
 
-        $fieldOne = $this->givenAFieldWithNameKindAndTo('One', 'one-to-one', 'Two');
+        $fieldOne = $this->givenARelationshipFieldWithNameKindAndTo('One', 'one-to-one', 'Two');
 
         $this->fieldManager->shouldReceive('readByHandles')
             ->once()
@@ -176,7 +175,6 @@ EOT;
 
     /**
      * @test
-     * @covers ::generateElements
      * @covers ::generateBySection
      */
     public function it_should_generate_section_and_skip_to_catch_block()
@@ -199,7 +197,7 @@ EOT;
             ->andReturn(FullyQualifiedClassName::fromString('\My\Namespace\Field'));
         $fieldType->shouldReceive('getType')->andReturn(Type::fromString('Email'));
 
-        $fieldOne = $this->givenAFieldWithNameKindAndTo('One', 'one-to-one', 'Two');
+        $fieldOne = $this->givenARelationshipFieldWithNameKindAndTo('One', 'one-to-one', 'Two');
 
         $this->fieldManager->shouldReceive('readByHandles')
             ->once()
@@ -215,6 +213,87 @@ EOT;
         $this->assertSame("SectionOne.orm.xml", $writable->getFilename());
         $this->assertSame($this->givenXmlResult(), $writable->getTemplate());
         $this->assertCount(1, $this->generator->getBuildMessages());
+    }
+
+    /**
+     * @test
+     * @covers ::generateBySection
+     */
+    public function it_should_throw_exception_when_section_is_ignored()
+    {
+        $this->expectException(IgnoredSectionException::class);
+        $sectionOne = $this->givenAnIgnoredSection();
+        $this->generator->generateBySection($sectionOne);
+    }
+
+    /**
+     * @test
+     * @covers ::generateBySection
+     */
+    public function it_should_add_unique_constraints_part_and_ignore_third_field()
+    {
+        $sectionOne = $this->givenASectionWithNameAndUniqueConstraint(
+            'One',
+            ['title', 'sectionTwo_id', 'nonExisting']
+        );
+
+        $this->sectionManager->shouldReceive('readByHandle')
+            ->twice()
+            ->andReturn($sectionOne);
+
+        $fieldtypeConfigDoctrineOneToOne = FieldTypeGeneratorConfig::fromArray(
+            [
+                'doctrine' => [
+                    'oneToOne' => DoctrineOneToOneGenerator::class
+                ]
+            ]
+        );
+
+        $fieldtypeConfigDoctrineTextInput = FieldTypeGeneratorConfig::fromArray(
+            [
+                'doctrine' => [
+                    'fields' => DoctrineFieldGenerator::class
+                ]
+            ]
+        );
+
+        $fieldType = Mockery::mock(FieldTypeInterface::class);
+        $fieldType->shouldReceive('getFieldTypeGeneratorConfig')
+            ->times(2)
+            ->andReturn($fieldtypeConfigDoctrineOneToOne);
+        $fieldType->shouldReceive('getFieldTypeGeneratorConfig')
+            ->times(3)
+            ->andReturn($fieldtypeConfigDoctrineTextInput);
+        $fieldType->shouldReceive('directory')
+            ->once()
+            ->andReturn(__DIR__ . '/../../../../src/FieldType/Relationship');
+
+        $fieldType->shouldReceive('directory')
+            ->once()
+            ->andReturn(__DIR__ . '/../../../../src/FieldType/TextInput');
+
+        $fieldOne = $this->givenARelationshipFieldWithNameKindAndTo('One', 'one-to-one', 'Two');
+        $fieldTwo = $this->givenAFieldWithNameTypeAndIgnore('title', 'TextInput');
+        $fieldThree = $this->givenAFieldWithNameTypeAndIgnore('ignored', 'TextInput', true);
+
+        $this->fieldManager->shouldReceive('readByHandles')
+            ->once()
+            ->andReturn([$fieldOne, $fieldTwo, $fieldThree]);
+
+        $this->container->shouldReceive('get')
+            ->times(7)
+            ->andReturn($fieldType);
+
+        $writable = $this->generator->generateBySection($sectionOne);
+        $this->assertInstanceOf(Writable::class, $writable);
+        $this->assertSame("My\\Namespace\\Resources\\config\\doctrine\\", $writable->getNamespace());
+        $this->assertSame("SectionOne.orm.xml", $writable->getFilename());
+        $this->assertSame($this->givenXmlResultWithUniqueConstraint(), $writable->getTemplate());
+        $this->assertCount(1, $this->generator->getBuildMessages());
+        $this->assertSame(
+            'Unique field nonExisting not found in fields of section',
+            $this->generator->getBuildMessages()[0]
+        );
     }
 
     private function givenASectionWithName($name)
@@ -249,7 +328,39 @@ EOT;
         return $section;
     }
 
-    private function givenAFieldWithNameKindAndTo($name, $kind, $to)
+    private function givenASectionWithNameAndUniqueConstraint(string $name, array $constraints)
+    {
+        $section = $this->givenASectionWithName($name);
+
+        $sectionConfig = $section->getConfig() ->toArray();
+        $sectionConfig['section']['generator'] = [
+            'doctrine' => [
+                'uniqueConstraint' => $constraints
+            ]
+        ];
+
+        $section->setConfig($sectionConfig);
+
+        return $section;
+    }
+
+    private function givenAnIgnoredSection()
+    {
+        $section = $this->givenASectionWithName('ignored');
+
+        $sectionConfig = $section->getConfig() ->toArray();
+        $sectionConfig['section']['generator'] = [
+            'doctrine' => [
+                'ignore' => true
+            ]
+        ];
+
+        $section->setConfig($sectionConfig);
+
+        return $section;
+    }
+
+    private function givenARelationshipFieldWithNameKindAndTo($name, $kind, $to)
     {
         $fieldName = 'Field ' . $name;
         $fieldHandle = 'field' . $name;
@@ -272,7 +383,42 @@ EOT;
 
         $fieldType = new FieldType();
         $fieldType->setFullyQualifiedClassName('\\My\\Namespace\\FieldTypeClass' . $name);
-        $fieldType->setType('Email');
+        $fieldType->setType('Relationship');
+
+        $field->setFieldType($fieldType);
+
+        return $field;
+    }
+
+    private function givenAFieldWithNameTypeAndIgnore($name, $type, $ignore = false)
+    {
+        $field = new Field();
+        $field->setName($name);
+        $field->setHandle($name);
+
+        $array = [
+            'field' => [
+                'name' => $name,
+                'handle' => $name,
+                'kind' => ''
+            ]
+        ];
+
+        if ($ignore) {
+            $array['field']['generator'] = [
+                'doctrine' => [
+                    'ignore' => true
+                ]
+            ];
+        }
+
+        $fieldConfig = FieldConfig::fromArray($array);
+
+        $field->setConfig($fieldConfig->toArray());
+
+        $fieldType = new FieldType();
+        $fieldType->setFullyQualifiedClassName('\\My\\Namespace\\FieldTypeClass' . $name);
+        $fieldType->setType($type);
 
         $field->setFieldType($fieldType);
 
@@ -293,6 +439,35 @@ EOT;
     <id name="id" type="integer">
       <generator strategy="AUTO"/>
     </id>
+  </entity>
+</doctrine-mapping>
+
+TXT;
+        //@codingStandardsIgnoreEnd
+        return $expected;
+    }
+
+    private function givenXmlResultWithUniqueConstraint()
+    {
+        //@codingStandardsIgnoreStart
+        $expected = <<<TXT
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+  <entity name="My\Namespace\Entity\SectionOne" table="sectionOne">
+    <unique-constraints>
+      <unique-constraint columns="title,sectionTwo_id,nonExisting" name="search_idx"/>
+    </unique-constraints>
+    <lifecycle-callbacks>
+      <lifecycle-callback type="prePersist" method="onPrePersist"/>
+      <lifecycle-callback type="preUpdate" method="onPreUpdate"/>
+    </lifecycle-callbacks>
+    <id name="id" type="integer">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="title" nullable="true" type="string"/>
+    <one-to-one field="sectionTwo" target-entity="My\Namespace\Entity\SectionOne">
+      <join-column name="sectionTwo_id" referenced-column-name="id"/>
+    </one-to-one>
   </entity>
 </doctrine-mapping>
 

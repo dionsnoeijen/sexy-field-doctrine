@@ -1,0 +1,3 @@
+<unique-constraints>
+    <unique-constraint columns="{{ columns }}" name="search_idx" />
+</unique-constraints>
