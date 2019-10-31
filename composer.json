@@ -31,9 +31,9 @@
     "tardigrades/sexy-field": "dev-sym-4.x",
     "doctrine/doctrine-bundle": "^1.6",
     "phpunit/phpunit": "^6.1",
-    "squizlabs/PHP_CodeSniffer": "^3.1",
+    "squizlabs/php_codesniffer": "^3.1",
     "mockery/mockery": "^0.9.9",
-    "mikey179/vfsStream": "^1.6",
+    "mikey179/vfsstream": "^1.6",
     "phing/phing": "^2.16"
   }
 }
