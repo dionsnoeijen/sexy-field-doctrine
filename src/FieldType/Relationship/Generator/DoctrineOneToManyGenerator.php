@@ -57,7 +57,7 @@ class DoctrineOneToManyGenerator implements GeneratorInterface
                     [
                         'toPluralHandle' => Inflector::pluralize($toHandle) . $toVersion,
                         'toFullyQualifiedClassName' => $to->getConfig()->getFullyQualifiedClassName(),
-                        'fromHandle' => (string) $fromHandle, // Don't version this one, it's mapped to the entity method.
+                        'fromHandle' => (string) $fromHandle, // Don't version this, it's mapped to the entity method.
                         'fromPluralHandle' => Inflector::pluralize((string) $handle) . $fromVersion,
                         'toHandle' => $toHandle . $toVersion,
                         'cascade' => $fieldConfig['field']['cascade'] ?? false

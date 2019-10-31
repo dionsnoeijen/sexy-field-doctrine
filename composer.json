@@ -22,6 +22,11 @@
       "Tardigrades\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Tardigrades\\": "test/unit/"
+    }
+  },
   "require-dev": {
     "tardigrades/sexy-field": "dev-sym-4.x",
     "doctrine/doctrine-bundle": "^1.6",

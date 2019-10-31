@@ -45,7 +45,8 @@ class DoctrineConfigGenerator extends Generator implements GeneratorInterface
         $ignored = false;
         try {
             $ignored = $this->sectionConfig->toArray()['section']['generator']['doctrine']['ignore'];
-        } catch (\Throwable $throwable) {}
+        } catch (\Throwable $throwable) {
+        }
         if ($ignored) {
             throw new IgnoredSectionException();
         }
@@ -67,7 +68,6 @@ class DoctrineConfigGenerator extends Generator implements GeneratorInterface
     {
         /** @var FieldInterface $field */
         foreach ($fields as $field) {
-
             // First see if this field is to be ignored by this generator
             if ($this->shouldIgnore($field)) {
                 continue;

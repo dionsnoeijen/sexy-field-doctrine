@@ -205,7 +205,7 @@ class DoctrineSectionReader extends Doctrine implements ReadSectionInterface
         $parsed = [];
         foreach ($results as $fields) {
             $entry = [];
-            foreach ($fields as $field=>&$value) {
+            foreach ($fields as $field => &$value) {
                 $field = str_replace($className . '_', '', $field);
                 $pieces = explode('_', $field);
                 foreach (array_reverse($pieces) as $piece) {
@@ -260,9 +260,17 @@ class DoctrineSectionReader extends Doctrine implements ReadSectionInterface
     ): void {
 
         if (!empty($fields)) {
-
             $className = lcfirst((string) $section->getClassName());
-            foreach ($fields as $handle=>$fieldValue) {
+            foreach ($fields as $handle => $fieldValue) {
+                $isNot = false;
+                $handle = explode(':', $handle);
+                if (count($handle) > 1 && $handle[0] === 'not') {
+                    $isNot = true;
+                    $handle = (string) $handle[1];
+                }
+                if (is_array($handle)) {
+                    $handle = (string) $handle[0];
+                }
 
                 $sectionEntity = (string) $section;
                 $fields = $sectionEntity::fieldInfo();
@@ -283,22 +291,28 @@ class DoctrineSectionReader extends Doctrine implements ReadSectionInterface
 
                 // If not a relationship, or not a related one relationship (so it's a regular field or a one field)
                 if ((is_null($joinOne) && is_null($joinMany)) || is_null($relate)) {
-
                     // If we have multiple field values, make an IN query
                     if (is_array($fieldValue)) {
-
                         $addOrNull = false;
                         if ($key = array_search('null', $fieldValue) !== false) {
                             $addOrNull = true;
                             unset($fieldValue[$key]);
                         }
-
-                        $this->queryBuilder->andWhere(
-                            $this->queryBuilder->expr()->in(
-                                (string) $className . '.' . (string) $handle,
-                                ':' . $handle
-                            )
-                        );
+                        if ($isNot) {
+                            $this->queryBuilder->andWhere(
+                                $this->queryBuilder->expr()->notIn(
+                                    (string) $className . '.' . (string) $handle,
+                                    ':' . $handle
+                                )
+                            );
+                        } else {
+                            $this->queryBuilder->andWhere(
+                                $this->queryBuilder->expr()->in(
+                                    (string) $className . '.' . (string) $handle,
+                                    ':' . $handle
+                                )
+                            );
+                        }
 
                         if ($addOrNull) {
                             $this->queryBuilder->orWhere((string)$className . '.' . (string)$handle . ' IS NULL');
@@ -311,7 +325,11 @@ class DoctrineSectionReader extends Doctrine implements ReadSectionInterface
                             $assign = ' IS NULL';
                             $fieldValue = null;
                         } else {
-                            $assign = '= :' . $handle;
+                            if ($isNot) {
+                                $assign = '!= :' . $handle . ' OR ' . $handle . ' IS NULL';
+                            } else {
+                                $assign = '= :' . $handle;
+                            }
                         }
 
                         $this->queryBuilder->andWhere((string) $className . '.' . (string) $handle . $assign);
@@ -458,7 +476,7 @@ class DoctrineSectionReader extends Doctrine implements ReadSectionInterface
     ) {
         if (!empty($joins)) {
             $className = lcfirst((string) $section->getClassName());
-            foreach ($joins as $handle=>$fieldValue) {
+            foreach ($joins as $handle => $fieldValue) {
                 $this->queryBuilder->innerJoin(
                     (string)$className . '.' . $handle,
                     $handle,

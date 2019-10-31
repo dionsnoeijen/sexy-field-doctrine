@@ -11,11 +11,10 @@ use PHPUnit\Framework\TestCase;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Tardigrades\SectionField\ValueObject\Before;
-use Tardigrades\SectionField\ValueObject\FullyQualifiedClassName;
 use Tardigrades\SectionField\ValueObject\SectionConfig;
 
 /**
- * @coversDefaultClass Tardigrades\SectionField\Service\DoctrineSectionReader
+ * @coversDefaultClass \Tardigrades\SectionField\Service\DoctrineSectionReader
  * @covers ::<private>
  */
 final class DoctrineSectionReaderTest extends TestCase
@@ -59,7 +58,7 @@ final class DoctrineSectionReaderTest extends TestCase
     public function it_reads()
     {
         $optionData = [
-            'section' => 'Tardigrades\SectionField\Generator\CommonSectionInterface'
+            'section' => 'Tardigrades\SectionField\Generator\CommonSectionInterfaceStub'
         ];
 
         $configData = [
@@ -87,11 +86,11 @@ final class DoctrineSectionReaderTest extends TestCase
 
         $this->queryBuilder->shouldReceive('select')
             ->once()
-            ->with('commonSectionInterface');
+            ->with('commonSectionInterfaceStub');
 
         $this->queryBuilder->shouldReceive('from')
             ->once()
-            ->with('Tardigrades\SectionField\Generator\CommonSectionInterface', 'commonSectionInterface');
+            ->with('Tardigrades\SectionField\Generator\CommonSectionInterfaceStub', 'commonSectionInterfaceStub');
 
         $this->queryBuilder->shouldReceive('getQuery')
             ->once()
@@ -107,7 +106,7 @@ final class DoctrineSectionReaderTest extends TestCase
     public function it_fails_with_no_results()
     {
         $optionData = [
-            'section' => 'Tardigrades\SectionField\Generator\CommonSectionInterface'
+            'section' => 'Tardigrades\SectionField\Generator\CommonSectionInterfaceStub'
         ];
 
         $configData = [
@@ -135,13 +134,13 @@ final class DoctrineSectionReaderTest extends TestCase
 
         $this->queryBuilder->shouldReceive('select')
             ->once()
-            ->with('commonSectionInterface');
+            ->with('commonSectionInterfaceStub');
 
         $this->queryBuilder->shouldReceive('from')
             ->once()
             ->with(
-                'Tardigrades\SectionField\Generator\CommonSectionInterface',
-                'commonSectionInterface'
+                'Tardigrades\SectionField\Generator\CommonSectionInterfaceStub',
+                'commonSectionInterfaceStub'
             );
 
         $this->queryBuilder->shouldReceive('getQuery')
@@ -154,6 +153,7 @@ final class DoctrineSectionReaderTest extends TestCase
     }
 
     /**
+     * @test
      * @covers ::read
      */
     public function it_reads_everything()
@@ -163,7 +163,7 @@ final class DoctrineSectionReaderTest extends TestCase
         $optionData = [
             'id' => 1,
             'slug' => 'section-one',
-            'section' => [ FullyQualifiedClassName::fromString('This\\Is\\SectionOne') ],
+            'section' => 'Tardigrades\SectionField\Service\CommonSectionInterfaceStub',
             'sectionId' => 2,
             'limit' => 3,
             'offset' => 4,
@@ -186,7 +186,14 @@ final class DoctrineSectionReaderTest extends TestCase
             ]
         ];
 
-        $reader = new DoctrineSectionReader($this->entityManager, $this->fetchFieldsQueryBuilder);
+        $reader = new DoctrineSectionReader($this->registry, $this->fetchFieldsQueryBuilder);
+        $this->givenWeHaveAValidEntityAssignedToAManager();
+        $this->registry->shouldReceive('getDefaultManagerName')
+            ->once()
+            ->andReturn('defaultManager');
+        $this->registry->shouldReceive('getManager')
+            ->once()
+            ->andReturn($this->entityManager);
         $sectionConfig = SectionConfig::fromArray($configData);
         $readOptions = ReadOptions::fromArray($optionData);
 
@@ -199,11 +206,11 @@ final class DoctrineSectionReaderTest extends TestCase
 
         $this->queryBuilder->shouldReceive('select')
             ->once()
-            ->with('sectionOne');
+            ->with('commonSectionInterfaceStub');
 
         $this->queryBuilder->shouldReceive('from')
             ->once()
-            ->with('This\\Is\\SectionOne', 'sectionOne');
+            ->with('Tardigrades\SectionField\Service\CommonSectionInterfaceStub', 'commonSectionInterfaceStub');
 
         $this->queryBuilder->shouldReceive('where')
             ->times(4);
@@ -233,7 +240,7 @@ final class DoctrineSectionReaderTest extends TestCase
 
         $this->queryBuilder->shouldReceive('orderBy')
             ->once()
-            ->with('sectionOne.some', 'asc');
+            ->with('commonSectionInterfaceStub.some', 'asc');
 
         $this->queryBuilder->shouldReceive('setParameter')
             ->once()
@@ -246,6 +253,75 @@ final class DoctrineSectionReaderTest extends TestCase
         $this->queryBuilder->shouldReceive('getQuery')
             ->once()
             ->andReturn($query);
+
+        $reader->read($readOptions, $sectionConfig);
+    }
+
+    /**
+     * @test
+     * @covers ::read
+     */
+    public function it_can_handle_negative_selections()
+    {
+        $optionData = [
+            'section' => 'Tardigrades\SectionField\Service\CommonSectionInterfaceStub',
+            'field' => [
+                'not:color' => ['purple']
+            ]
+        ];
+
+        $configData = [
+            'section' => [
+                'name' => 'nameTo',
+                'handle' => 'handle',
+                'fields' => ['a' => 'b'],
+                'default' => 'default',
+                'namespace' => 'namespace'
+            ]
+        ];
+
+        $reader = new DoctrineSectionReader($this->registry, $this->fetchFieldsQueryBuilder);
+        $sectionConfig = SectionConfig::fromArray($configData);
+        $readOptions = ReadOptions::fromArray($optionData);
+
+        $this->givenWeHaveAValidEntityAssignedToAManager();
+        $this->registry->shouldReceive('getDefaultManagerName')
+            ->once()
+            ->andReturn('defaultManager');
+        $this->registry->shouldReceive('getManager')
+            ->once()
+            ->andReturn($this->entityManager);
+
+        $query = Mockery::mock('alias:Query')->makePartial()
+            ->shouldReceive('getResult')->andReturn(['dont know'])->getMock();
+
+        $this->entityManager->shouldReceive('createQueryBuilder')
+            ->once()
+            ->andReturn($this->queryBuilder);
+
+        $this->queryBuilder->shouldReceive('select')
+            ->once()
+            ->with('commonSectionInterfaceStub');
+
+        $this->queryBuilder->shouldReceive('from')
+            ->once()
+            ->with('Tardigrades\SectionField\Service\CommonSectionInterfaceStub', 'commonSectionInterfaceStub');
+
+        $this->queryBuilder->shouldReceive('getQuery')
+            ->once()
+            ->andReturn($query);
+
+        $this->queryBuilder->shouldReceive('expr->notIn')
+            ->once()
+            ->with('commonSectionInterfaceStub.color', ':color');
+
+        $this->queryBuilder->shouldReceive('andWhere')
+            ->once()
+            ->with(null);
+
+        $this->queryBuilder->shouldReceive('setParameter')
+            ->once()
+            ->with('color', ['purple']);
 
         $reader->read($readOptions, $sectionConfig);
     }
@@ -265,7 +341,7 @@ final class DoctrineSectionReaderTest extends TestCase
         $configuration = Mockery::mock(Configuration::class);
         $configuration->shouldReceive('getEntityNamespaces')
             ->once()
-            ->andReturn(['Tardigrades\SectionField\Generator\CommonSectionInterface']);
+            ->andReturn(['Tardigrades\SectionField\Generator\CommonSectionInterfaceStub']);
 
         $this->entityManager->shouldReceive('getConfiguration')
             ->once()

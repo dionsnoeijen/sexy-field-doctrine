@@ -57,15 +57,15 @@ class DoctrineManyToManyGenerator implements GeneratorInterface
                         'type' => $fieldConfig['field']['relationship-type'],
                         'owner' => $fieldConfig['field']['owner'],
                         'toPluralHandle' => Inflector::pluralize(
-                                $fieldConfig['field']['as'] ?? $fieldConfig['field']['to']
-                            ) . $toVersion,
+                            $fieldConfig['field']['as'] ?? $fieldConfig['field']['to']
+                        ) . $toVersion,
                         'toFullyQualifiedClassName' => $to
                             ->getConfig()
                             ->getFullyQualifiedClassName(),
                         'fromHandle' => (string)$fromHandle . $fromVersion,
                         'fromPluralHandle' => Inflector::pluralize(
-                                (string)$fromHandle
-                            ) . $fromVersion,
+                            (string)$fromHandle
+                        ) . $fromVersion,
                         'fromFullyQualifiedClassName' => $sectionConfig
                             ->getFullyQualifiedClassName(),
                         'toHandle' => $fieldConfig['field']['to'] . $toVersion,

@@ -98,7 +98,7 @@ class FetchFieldsQueryBuilder
         $queryBuilder->addSelect($this->selectProperties);
         $queryBuilder->from($start['reflection']->getName(), $start['propertyName']);
         array_multisort($this->joins);
-        foreach ($this->joins as $join=>$order) {
+        foreach ($this->joins as $join => $order) {
             $joinOn = explode(' ', $join);
             $queryBuilder->leftJoin($joinOn[0], $joinOn[1]);
         }
@@ -121,7 +121,7 @@ class FetchFieldsQueryBuilder
         $propertyName = $reflection['propertyName'];
 
         $depth++;
-        foreach ($fields as $key=>$field) {
+        foreach ($fields as $key => $field) {
             if (empty($field['relatedToSection']) && !empty($field['propertyName'])) {
                 if (!is_null($prevPropertyName) && $prevPropertyName !== $propertyName) {
                     $as = ltrim($prevPropertyName.'_'.$propertyName, '_');
@@ -197,7 +197,9 @@ class FetchFieldsQueryBuilder
                         $this->reflections[$className]['fields'][] = ['propertyName' => $property->getName()];
                         try {
                             if (lcfirst($docComment) !== 'string' && lcfirst($docComment) !== '\DateTime') {
-                                $section = $this->sectionManager->readByHandle(Handle::fromString(lcfirst($docComment)));
+                                $section = $this->sectionManager->readByHandle(
+                                    Handle::fromString(lcfirst($docComment))
+                                );
                                 end($this->reflections[$className]['fields']);
                                 $key = key($this->reflections[$className]['fields']);
                                 $this->reflections[$className]['fields'][$key]['relatedToSection'] = $docComment;
