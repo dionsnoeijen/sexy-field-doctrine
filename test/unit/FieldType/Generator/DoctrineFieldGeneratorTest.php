@@ -46,7 +46,7 @@ final class DoctrineFieldGeneratorTest extends TestCase
     {
         $expectedResults = [
             "src/FieldType/Birthday" => "<field name=\"niets\" nullable=\"true\" type=\"date\" unique=\"false\" />\n",
-            "src/FieldType/Boolean" =>  "<field name=\"niets\" type=\"boolean\" unique=\"false\" />\n",
+            "src/FieldType/Boolean" =>  "<field name=\"niets\" type=\"boolean\" nullable=\"true\" unique=\"false\" />\n",
             "src/FieldType/Choice" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"false\" />\n",
             "src/FieldType/ConfigurationOverride" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"false\" />\n",
             "src/FieldType/Country" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"false\" />\n",
@@ -57,7 +57,7 @@ final class DoctrineFieldGeneratorTest extends TestCase
             "src/FieldType/Integer" =>  "<field name=\"niets\" nullable=\"true\" type=\"integer\" unique=\"false\"/>\n",
             "src/FieldType/Number" =>  "<field name=\"niets\" nullable=\"true\" type=\"float\" unique=\"false\"/>\n",
             "src/FieldType/RichTextArea" =>  "<field name=\"niets\" nullable=\"true\" type=\"text\" unique=\"false\"/>\n",
-            "src/FieldType/Slug" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"true\" />\n",
+            "src/FieldType/Slug" =>  "<field name=\"niets\" type=\"string\" unique=\"true\" />\n",
             "src/FieldType/TextArea" =>  "<field name=\"niets\" nullable=\"true\" type=\"text\" unique=\"false\"/>\n",
             "src/FieldType/TextInput" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"false\"/>\n",
             "src/FieldType/Uuid" =>  "<field name=\"niets\" nullable=\"true\" length=\"36\" type=\"string\" unique=\"false\"/>\n",
@@ -98,7 +98,7 @@ final class DoctrineFieldGeneratorTest extends TestCase
     {
         $expectedResults = [
             "src/FieldType/Birthday" => "<field name=\"niets\" nullable=\"false\" type=\"date\" unique=\"false\" />\n",
-            "src/FieldType/Boolean" =>  "<field name=\"niets\" type=\"boolean\" unique=\"false\" />\n",
+            "src/FieldType/Boolean" =>  "<field name=\"niets\" type=\"boolean\" nullable=\"false\" unique=\"false\" />\n",
             "src/FieldType/Choice" =>  "<field name=\"niets\" nullable=\"false\" type=\"string\" unique=\"false\" />\n",
             "src/FieldType/ConfigurationOverride" =>  "<field name=\"niets\" nullable=\"false\" type=\"string\" unique=\"false\" />\n",
             "src/FieldType/Country" =>  "<field name=\"niets\" nullable=\"false\" type=\"string\" unique=\"false\" />\n",
@@ -109,7 +109,7 @@ final class DoctrineFieldGeneratorTest extends TestCase
             "src/FieldType/Integer" =>  "<field name=\"niets\" nullable=\"false\" type=\"integer\" unique=\"false\"/>\n",
             "src/FieldType/Number" =>  "<field name=\"niets\" nullable=\"false\" type=\"float\" unique=\"false\"/>\n",
             "src/FieldType/RichTextArea" =>  "<field name=\"niets\" nullable=\"false\" type=\"text\" unique=\"false\"/>\n",
-            "src/FieldType/Slug" =>  "<field name=\"niets\" nullable=\"false\" type=\"string\" unique=\"true\" />\n",
+            "src/FieldType/Slug" =>  "<field name=\"niets\" type=\"string\" unique=\"true\" />\n",
             "src/FieldType/TextArea" =>  "<field name=\"niets\" nullable=\"false\" type=\"text\" unique=\"false\"/>\n",
             "src/FieldType/TextInput" =>  "<field name=\"niets\" nullable=\"false\" type=\"string\" unique=\"false\"/>\n",
             "src/FieldType/Uuid" =>  "<field name=\"niets\" nullable=\"false\" length=\"36\" type=\"string\" unique=\"false\"/>\n",
@@ -156,7 +156,7 @@ final class DoctrineFieldGeneratorTest extends TestCase
     {
         $expectedResults = [
             "src/FieldType/Birthday" => "<field name=\"niets\" nullable=\"true\" type=\"date\" unique=\"false\" />\n",
-            "src/FieldType/Boolean" =>  "<field name=\"niets\" type=\"boolean\" unique=\"false\" />\n",
+            "src/FieldType/Boolean" =>  "<field name=\"niets\" type=\"boolean\" nullable=\"true\" unique=\"false\" />\n",
             "src/FieldType/Choice" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"false\" />\n",
             "src/FieldType/ConfigurationOverride" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"false\" />\n",
             "src/FieldType/Country" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"false\" />\n",
@@ -167,7 +167,7 @@ final class DoctrineFieldGeneratorTest extends TestCase
             "src/FieldType/Integer" =>  "<field name=\"niets\" nullable=\"true\" type=\"integer\" unique=\"false\"/>\n",
             "src/FieldType/Number" =>  "<field name=\"niets\" nullable=\"true\" type=\"float\" unique=\"false\"/>\n",
             "src/FieldType/RichTextArea" =>  "<field name=\"niets\" nullable=\"true\" type=\"text\" unique=\"false\"/>\n",
-            "src/FieldType/Slug" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"true\" />\n",
+            "src/FieldType/Slug" =>  "<field name=\"niets\" type=\"string\" unique=\"true\" />\n",
             "src/FieldType/TextArea" =>  "<field name=\"niets\" nullable=\"true\" type=\"text\" unique=\"false\"/>\n",
             "src/FieldType/TextInput" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"false\"/>\n",
             "src/FieldType/Uuid" =>  "<field name=\"niets\" nullable=\"true\" length=\"36\" type=\"string\" unique=\"false\"/>\n",
@@ -213,7 +213,7 @@ final class DoctrineFieldGeneratorTest extends TestCase
     {
         $expectedResults = [
             "src/FieldType/Birthday" => "<field name=\"niets\" nullable=\"false\" type=\"date\" unique=\"false\" />\n",
-            "src/FieldType/Boolean" =>  "<field name=\"niets\" type=\"boolean\" unique=\"false\" />\n",
+            "src/FieldType/Boolean" =>  "<field name=\"niets\" type=\"boolean\" nullable=\"false\" unique=\"false\" />\n",
             "src/FieldType/Choice" =>  "<field name=\"niets\" nullable=\"false\" type=\"string\" unique=\"false\" />\n",
             "src/FieldType/ConfigurationOverride" =>  "<field name=\"niets\" nullable=\"false\" type=\"string\" unique=\"false\" />\n",
             "src/FieldType/Country" =>  "<field name=\"niets\" nullable=\"false\" type=\"string\" unique=\"false\" />\n",
@@ -224,7 +224,7 @@ final class DoctrineFieldGeneratorTest extends TestCase
             "src/FieldType/Integer" =>  "<field name=\"niets\" nullable=\"false\" type=\"integer\" unique=\"false\"/>\n",
             "src/FieldType/Number" =>  "<field name=\"niets\" nullable=\"false\" type=\"float\" unique=\"false\"/>\n",
             "src/FieldType/RichTextArea" =>  "<field name=\"niets\" nullable=\"false\" type=\"text\" unique=\"false\"/>\n",
-            "src/FieldType/Slug" =>  "<field name=\"niets\" nullable=\"false\" type=\"string\" unique=\"true\" />\n",
+            "src/FieldType/Slug" =>  "<field name=\"niets\" type=\"string\" unique=\"true\" />\n",
             "src/FieldType/TextArea" =>  "<field name=\"niets\" nullable=\"false\" type=\"text\" unique=\"false\"/>\n",
             "src/FieldType/TextInput" =>  "<field name=\"niets\" nullable=\"false\" type=\"string\" unique=\"false\"/>\n",
             "src/FieldType/Uuid" =>  "<field name=\"niets\" nullable=\"false\" length=\"36\" type=\"string\" unique=\"false\"/>\n",
@@ -271,7 +271,7 @@ final class DoctrineFieldGeneratorTest extends TestCase
     {
         $expectedResults = [
             "src/FieldType/Birthday" => "<field name=\"niets\" nullable=\"true\" type=\"date\" unique=\"true\" />\n",
-            "src/FieldType/Boolean" =>  "<field name=\"niets\" type=\"boolean\" unique=\"true\" />\n",
+            "src/FieldType/Boolean" =>  "<field name=\"niets\" type=\"boolean\" nullable=\"true\" unique=\"true\" />\n",
             "src/FieldType/Choice" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"true\" />\n",
             "src/FieldType/ConfigurationOverride" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"true\" />\n",
             "src/FieldType/Country" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"true\" />\n",
@@ -282,7 +282,7 @@ final class DoctrineFieldGeneratorTest extends TestCase
             "src/FieldType/Integer" =>  "<field name=\"niets\" nullable=\"true\" type=\"integer\" unique=\"true\"/>\n",
             "src/FieldType/Number" =>  "<field name=\"niets\" nullable=\"true\" type=\"float\" unique=\"true\"/>\n",
             "src/FieldType/RichTextArea" =>  "<field name=\"niets\" nullable=\"true\" type=\"text\" unique=\"true\"/>\n",
-            "src/FieldType/Slug" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"true\" />\n",
+            "src/FieldType/Slug" =>  "<field name=\"niets\" type=\"string\" unique=\"true\" />\n",
             "src/FieldType/TextArea" =>  "<field name=\"niets\" nullable=\"true\" type=\"text\" unique=\"true\"/>\n",
             "src/FieldType/TextInput" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"true\"/>\n",
             "src/FieldType/Uuid" =>  "<field name=\"niets\" nullable=\"true\" length=\"36\" type=\"string\" unique=\"true\"/>\n",
@@ -329,7 +329,7 @@ final class DoctrineFieldGeneratorTest extends TestCase
     {
         $expectedResults = [
             "src/FieldType/Birthday" => "<field name=\"niets\" nullable=\"true\" type=\"date\" unique=\"true\" />\n",
-            "src/FieldType/Boolean" =>  "<field name=\"niets\" type=\"boolean\" unique=\"true\" />\n",
+            "src/FieldType/Boolean" =>  "<field name=\"niets\" type=\"boolean\" nullable=\"true\" unique=\"true\" />\n",
             "src/FieldType/Choice" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"true\" />\n",
             "src/FieldType/ConfigurationOverride" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"true\" />\n",
             "src/FieldType/Country" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"true\" />\n",
@@ -340,7 +340,7 @@ final class DoctrineFieldGeneratorTest extends TestCase
             "src/FieldType/Integer" =>  "<field name=\"niets\" nullable=\"true\" type=\"integer\" unique=\"true\"/>\n",
             "src/FieldType/Number" =>  "<field name=\"niets\" nullable=\"true\" type=\"float\" unique=\"true\"/>\n",
             "src/FieldType/RichTextArea" =>  "<field name=\"niets\" nullable=\"true\" type=\"text\" unique=\"true\"/>\n",
-            "src/FieldType/Slug" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"true\" />\n",
+            "src/FieldType/Slug" =>  "<field name=\"niets\" type=\"string\" unique=\"true\" />\n",
             "src/FieldType/TextArea" =>  "<field name=\"niets\" nullable=\"true\" type=\"text\" unique=\"true\"/>\n",
             "src/FieldType/TextInput" =>  "<field name=\"niets\" nullable=\"true\" type=\"string\" unique=\"true\"/>\n",
             "src/FieldType/Uuid" =>  "<field name=\"niets\" nullable=\"true\" length=\"36\" type=\"string\" unique=\"true\"/>\n",

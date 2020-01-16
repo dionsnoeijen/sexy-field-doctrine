@@ -1,1 +1,1 @@
-<field name="{{ handle }}" type="boolean" unique="{{ unique }}" />
+<field name="{{ handle }}" nullable="{{ nullable }}" type="boolean" unique="{{ unique }}" />
