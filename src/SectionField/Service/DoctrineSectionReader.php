@@ -184,18 +184,18 @@ class DoctrineSectionReader extends Doctrine implements ReadSectionInterface
 
     private function isManyRelationship(string $fieldProperty, array $fields): ?string
     {
-        if (key_exists($fieldProperty, $fields)) {
-            try {
-                switch ($fields[$fieldProperty]['relationship']['kind']) {
-                    case 'one-to-many':
-                    case 'many-to-many':
+        if (key_exists($fieldProperty, $fields) &&
+            key_exists('relationship', $fields[$fieldProperty]) &&
+            key_exists('kind', $fields[$fieldProperty]['relationship'])
+        ) {
+            switch ($fields[$fieldProperty]['relationship']['kind']) {
+                case 'one-to-many':
+                case 'many-to-many':
+                    if (key_exists('class', $fields[$fieldProperty]['relationship'])) {
                         return $fields[$fieldProperty]['relationship']['class'];
-                }
-            } catch (\Exception $exception) {
-                // Field is no relationship
+                    }
             }
         }
-
         return null;
     }
 
