@@ -167,9 +167,9 @@ class DoctrineSectionReader extends Doctrine implements ReadSectionInterface
 
     private function isOneRelationship(string $fieldProperty, array $fields): ?string
     {
-        if (key_exists($fieldProperty, $fields) &&
-            key_exists('relationship', $fields[$fieldProperty]) &&
-            key_exists('kind', $fields[$fieldProperty]['relationship'])
+        if (!empty($fields[$fieldProperty]) &&
+            !empty($fields[$fieldProperty]['relationship']) &&
+            !empty($fields[$fieldProperty]['relationship']['kind'])
         ) {
             switch ($fields[$fieldProperty]['relationship']['kind']) {
                 case 'many-to-one':
@@ -185,9 +185,9 @@ class DoctrineSectionReader extends Doctrine implements ReadSectionInterface
 
     private function isManyRelationship(string $fieldProperty, array $fields): ?string
     {
-        if (key_exists($fieldProperty, $fields) &&
-            key_exists('relationship', $fields[$fieldProperty]) &&
-            key_exists('kind', $fields[$fieldProperty]['relationship'])
+        if (!empty($fields[$fieldProperty]) &&
+            !empty($fields[$fieldProperty]['relationship']) &&
+            !empty($fields[$fieldProperty]['relationship']['kind'])
         ) {
             switch ($fields[$fieldProperty]['relationship']['kind']) {
                 case 'one-to-many':
