@@ -45,10 +45,12 @@ class DoctrineSectionCreator extends Doctrine implements CreateSectionInterface
 
     /**
      * @param CommonSectionInterface $data
-     * @throws NoEntityManagerFoundForSection
+     * @param OptionsInterface|null $createOptions
      */
-    public function persist(CommonSectionInterface $data)
-    {
+    public function persist(
+        CommonSectionInterface $data,
+        ?OptionsInterface $createOptions = null
+    ) {
         $this->determineEntityManager(FullyQualifiedClassName::fromString(get_class($data)));
 
         $this->entityManager->persist($data);
