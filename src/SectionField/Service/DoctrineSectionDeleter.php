@@ -30,11 +30,13 @@ class DoctrineSectionDeleter extends Doctrine implements DeleteSectionInterface
 
     /**
      * @param CommonSectionInterface $sectionEntryEntity
+     * @param OptionsInterface|null $deleteOptions
      * @return bool
-     * @throws NoEntityManagerFoundForSection
      */
-    public function delete(CommonSectionInterface $sectionEntryEntity): bool
-    {
+    public function delete(
+        CommonSectionInterface $sectionEntryEntity,
+        ?OptionsInterface $deleteOptions = null
+    ): bool {
         $this->determineEntityManager(
             FullyQualifiedClassName::fromString(get_class($sectionEntryEntity))
         );

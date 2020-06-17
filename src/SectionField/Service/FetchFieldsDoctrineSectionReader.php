@@ -34,13 +34,13 @@ class FetchFieldsDoctrineSectionReader extends Doctrine implements ReadSectionIn
     }
 
     /**
-     * @param ReadOptionsInterface $options
+     * @param OptionsInterface $options
      * @param SectionConfig|null $sectionConfig
      * @return \ArrayIterator
      * @throws EntryNotFoundException
      * @throws NoEntityManagerFoundForSection
      */
-    public function read(ReadOptionsInterface $options, SectionConfig $sectionConfig = null): \ArrayIterator
+    public function read(OptionsInterface $options, SectionConfig $sectionConfig = null): \ArrayIterator
     {
         $results = $this->buildQuery($options)->getQuery()->getResult();
         if (count($results) === 0) {
@@ -59,12 +59,12 @@ class FetchFieldsDoctrineSectionReader extends Doctrine implements ReadSectionIn
     /**
      * Like ::read, but returns a nested array, like ['foo' => ['bar' => 'baz']] instead of ['foo:bar' => 'baz'].
      * It's a bit slower.
-     * @param ReadOptionsInterface $options
+     * @param OptionsInterface $options
      * @return \ArrayIterator
      * @throws EntryNotFoundException
      * @throws NoEntityManagerFoundForSection
      */
-    public function readNested(ReadOptionsInterface $options): \ArrayIterator
+    public function readNested(OptionsInterface $options): \ArrayIterator
     {
         $results = $this->buildQuery($options)->getQuery()->getResult();
         if (count($results) === 0) {
@@ -81,11 +81,11 @@ class FetchFieldsDoctrineSectionReader extends Doctrine implements ReadSectionIn
     /**
      * Build a DQL query to fetch all the fields you need in one go, without lazy loading.
      * Returns a QueryBuilder that can be used to further enhance the query.
-     * @param ReadOptionsInterface $readOptions
+     * @param OptionsInterface $readOptions
      * @return ORM\QueryBuilder
      * @throws NoEntityManagerFoundForSection
      */
-    public function buildQuery(ReadOptionsInterface $readOptions): ORM\QueryBuilder
+    public function buildQuery(OptionsInterface $readOptions): ORM\QueryBuilder
     {
         $section = $readOptions->getSection()[0];
         $this->determineEntityManager($section);

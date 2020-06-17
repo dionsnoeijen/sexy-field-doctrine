@@ -33,7 +33,7 @@ class DoctrineSectionReader extends Doctrine implements ReadSectionInterface
     /** @var QueryBuilder */
     private $queryBuilder;
 
-    /** FetchFieldsQueryBuilder */
+    /** @var FetchFieldsQueryBuilder */
     private $fetchFieldsQueryBuilder;
 
     public function __construct(
@@ -47,14 +47,16 @@ class DoctrineSectionReader extends Doctrine implements ReadSectionInterface
     }
 
     /**
-     * @param ReadOptionsInterface $readOptions
+     * @param OptionsInterface $readOptions
      * @param SectionConfig|null $sectionConfig
      * @return \ArrayIterator
      * @throws EntryNotFoundException
      * @throws NoEntityManagerFoundForSection
      */
-    public function read(ReadOptionsInterface $readOptions, SectionConfig $sectionConfig = null): \ArrayIterator
-    {
+    public function read(
+        OptionsInterface $readOptions,
+        SectionConfig $sectionConfig = null
+    ): \ArrayIterator {
         $query = $readOptions->getQuery();
         if (!is_null($query)) {
             $results = $this->manualQuery($readOptions);
@@ -542,10 +544,10 @@ class DoctrineSectionReader extends Doctrine implements ReadSectionInterface
     }
 
     /**
-     * @param ReadOptionsInterface $readOptions
+     * @param OptionsInterface $readOptions
      * @return \ArrayIterator
      */
-    private function manualQuery(ReadOptionsInterface $readOptions): \ArrayIterator
+    private function manualQuery(OptionsInterface $readOptions): \ArrayIterator
     {
         $this->determineEntityManager();
         $query = $readOptions->getQuery();
