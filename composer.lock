@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6a1c893a7f6b68e0b316fbde74e92466",
+    "content-hash": "6bc43d5caddd0a2e930387652932d489",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -5682,16 +5682,16 @@
         },
         {
             "name": "tardigrades/sexy-field",
-            "version": "dev-integrate-create-and-delete-options",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dionsnoeijen/sexy-field.git",
-                "reference": "c82b27e281101a1155bdb303b2ebb553e1573a92"
+                "reference": "567aa4797f7e071ba447ad3c7ecdb833426ac73f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dionsnoeijen/sexy-field/zipball/c82b27e281101a1155bdb303b2ebb553e1573a92",
-                "reference": "c82b27e281101a1155bdb303b2ebb553e1573a92",
+                "url": "https://api.github.com/repos/dionsnoeijen/sexy-field/zipball/567aa4797f7e071ba447ad3c7ecdb833426ac73f",
+                "reference": "567aa4797f7e071ba447ad3c7ecdb833426ac73f",
                 "shasum": ""
             },
             "require": {
@@ -5715,7 +5715,6 @@
             "require-dev": {
                 "mikey179/vfsstream": "^1.6",
                 "mockery/mockery": "^1.0",
-                "phing/phing": "^2.16",
                 "phpunit/phpunit": "^7.0",
                 "squizlabs/php_codesniffer": "^3.2"
             },
@@ -5736,7 +5735,7 @@
                 }
             ],
             "description": "SexyField helps you build application structure and accompanying forms.",
-            "time": "2020-06-17T12:25:57+00:00"
+            "time": "2020-06-17T12:49:33+00:00"
         },
         {
             "name": "theseer/tokenizer",

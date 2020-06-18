@@ -28,7 +28,7 @@
     }
   },
   "require-dev": {
-    "tardigrades/sexy-field": "dev-integrate-create-and-delete-options",
+    "tardigrades/sexy-field": "dev-master",
     "doctrine/doctrine-bundle": "^1.6",
     "phpunit/phpunit": "^7.0",
     "mockery/mockery": "^1.0",
