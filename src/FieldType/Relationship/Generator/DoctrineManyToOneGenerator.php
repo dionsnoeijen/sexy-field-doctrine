@@ -59,6 +59,12 @@ class DoctrineManyToOneGenerator implements GeneratorInterface
             $fromVersion = $from->getVersion()->toInt() > 1 ? ('_' . $from->getVersion()->toInt()) : '';
             $toVersion = $to->getVersion()->toInt() > 1 ? ('_' . $to->getVersion()->toInt()) : '';
 
+            if (!empty($fieldConfig['field']['from-handle'])) {
+                $fromPluralHandle = Inflector::pluralize($fieldConfig['field']['from-handle']);
+            } else {
+                $fromPluralHandle = Inflector::pluralize((string)$handle) . $fromVersion;
+            }
+
             return Template::create(
                 TemplateLoader::load(
                     (string) $templateDir . '/GeneratorTemplate/doctrine.manytoone.xml.php',
@@ -66,7 +72,7 @@ class DoctrineManyToOneGenerator implements GeneratorInterface
                         'type' => $fieldConfig['field']['relationship-type'],
                         'toHandle' => $toHandle . $toVersion,
                         'toFullyQualifiedClassName' => $to->getConfig()->getFullyQualifiedClassName(),
-                        'fromPluralHandle' => Inflector::pluralize((string) $handle) . $fromVersion,
+                        'fromPluralHandle' => $fromPluralHandle,
                         'cascade' => $fieldConfig['field']['cascade'] ?? false,
                         'unique' => $unique ? 'true' : 'false',
                         'nullable' => $nullable ? 'true' : 'false',
