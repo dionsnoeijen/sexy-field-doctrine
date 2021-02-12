@@ -13,7 +13,8 @@ declare (strict_types=1);
 
 namespace Tardigrades\FieldType\Relationship\Generator;
 
-use Doctrine\Common\Util\Inflector;
+use Doctrine\Inflector\InflectorFactory;
+use Doctrine\Inflector\Language;
 use Tardigrades\Entity\FieldInterface;
 use Tardigrades\Entity\SectionInterface;
 use Tardigrades\FieldType\Generator\GeneratorInterface;
@@ -51,14 +52,15 @@ class DoctrineOneToManyGenerator implements GeneratorInterface
 
             $fromHandle = !empty($fieldConfig['field']['from-handle']) ? $fieldConfig['field']['from-handle'] : $handle;
 
+            $inflector = InflectorFactory::createForLanguage(Language::ENGLISH)->build();
             return Template::create(
                 TemplateLoader::load(
                     (string) $templateDir . '/GeneratorTemplate/doctrine.onetomany.xml.php',
                     [
-                        'toPluralHandle' => Inflector::pluralize($toHandle) . $toVersion,
+                        'toPluralHandle' => $inflector->pluralize($toHandle) . $toVersion,
                         'toFullyQualifiedClassName' => $to->getConfig()->getFullyQualifiedClassName(),
                         'fromHandle' => (string) $fromHandle, // Don't version this, it's mapped to the entity method.
-                        'fromPluralHandle' => Inflector::pluralize((string) $handle) . $fromVersion,
+                        'fromPluralHandle' => $inflector->pluralize((string) $handle) . $fromVersion,
                         'toHandle' => $toHandle . $toVersion,
                         'cascade' => $fieldConfig['field']['cascade'] ?? false
                     ]
