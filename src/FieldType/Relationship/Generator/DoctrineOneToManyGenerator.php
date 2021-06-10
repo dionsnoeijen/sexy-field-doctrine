@@ -47,8 +47,11 @@ class DoctrineOneToManyGenerator implements GeneratorInterface
             $to = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['to']));
 
             $fetch = null;
-            if (!empty($fieldConfig['field']['fetch'])) {
-                $fetch = $fieldConfig['field']['fetch'];
+            if (!empty($fieldConfig['field']['generator']) &&
+                !empty($fieldConfig['field']['generator']['doctrine']) &&
+                !empty($fieldConfig['field']['generator']['doctrine']['fetch'])
+            ) {
+                $fetch = $fieldConfig['field']['generator']['doctrine']['fetch'];
             }
 
             $fromVersion = $from->getVersion()->toInt() > 1 ? ('_' . $from->getVersion()->toInt()) : '';
