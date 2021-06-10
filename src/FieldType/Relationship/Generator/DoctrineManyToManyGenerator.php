@@ -60,14 +60,17 @@ class DoctrineManyToManyGenerator implements GeneratorInterface
             }
 
             $fetch = null;
-            if (!empty($fieldConfig['field']['fetch'])) {
-                $fetch = $fieldConfig['field']['fetch'];
+            if (!empty($fieldConfig['field']['generator']) &&
+                !empty($fieldConfig['field']['generator']['doctrine']) &&
+                !empty($fieldConfig['field']['generator']['doctrine']['fetch'])
+            ) {
+                $fetch = $fieldConfig['field']['generator']['doctrine']['fetch'];
             }
 
             $fromHandle = $fieldConfig['field']['from-handle'] ?? $handle;
             return Template::create(
                 TemplateLoader::load(
-                    (string)$templateDir . '/GeneratorTemplate/doctrine.manytomany.xml.php',
+                    (string) $templateDir . '/GeneratorTemplate/doctrine.manytomany.xml.php',
                     [
                         'type' => $fieldConfig['field']['relationship-type'],
                         'owner' => $fieldConfig['field']['owner'],
