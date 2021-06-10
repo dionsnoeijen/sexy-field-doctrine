@@ -59,6 +59,11 @@ class DoctrineManyToManyGenerator implements GeneratorInterface
                 $nullable = $fieldConfig['field']['nullable'];
             }
 
+            $fetch = null;
+            if (!empty($fieldConfig['field']['fetch'])) {
+                $fetch = $fieldConfig['field']['fetch'];
+            }
+
             $fromHandle = $fieldConfig['field']['from-handle'] ?? $handle;
             return Template::create(
                 TemplateLoader::load(
