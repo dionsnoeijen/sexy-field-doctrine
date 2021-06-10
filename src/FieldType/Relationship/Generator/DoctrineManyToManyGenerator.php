@@ -87,6 +87,7 @@ class DoctrineManyToManyGenerator implements GeneratorInterface
                         'cascade' => $fieldConfig['field']['cascade'] ?? false,
                         'unique' => $unique ? 'true' : 'false',
                         'nullable' => $nullable ? 'true' : 'false',
+                        'fetch' => $fetch
                     ]
                 )
             );
