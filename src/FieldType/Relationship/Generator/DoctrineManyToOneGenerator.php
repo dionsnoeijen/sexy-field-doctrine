@@ -65,11 +65,6 @@ class DoctrineManyToOneGenerator implements GeneratorInterface
                 $fromPluralHandle = Inflector::pluralize((string)$handle) . $fromVersion;
             }
 
-            $fetch = null;
-            if (!empty($fieldConfig['field']['fetch'])) {
-                $fetch = $fieldConfig['field']['fetch'];
-            }
-
             return Template::create(
                 TemplateLoader::load(
                     (string) $templateDir . '/GeneratorTemplate/doctrine.manytoone.xml.php',
