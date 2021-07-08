@@ -24,7 +24,7 @@ final class DoctrineSectionCreatorTest extends TestCase
     /** @var Registry|Mockery\MockInterface */
     private $registry;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->entityManager = Mockery::mock(EntityManagerInterface::class);
         $this->registry = Mockery::mock(Registry::class);

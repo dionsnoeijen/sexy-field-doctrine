@@ -28,7 +28,7 @@ final class FetchFieldsDoctrineSectionReaderTest extends TestCase
     /** @var Registry|m\MockInterface */
     private $registry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entityManager = m::mock(ORM\EntityManager::class)->makePartial();
         $this->registry = m::mock(Registry::class);
@@ -134,11 +134,13 @@ DQL
     }
 
     /**
-     * @expectedException \Tardigrades\SectionField\Service\InvalidFetchFieldsQueryException
-     * @expectedExceptionMessage Class doesn't have a slug field
+     * @test
      */
     public function testThatItFailsOnASluglessClass(): void
     {
+        $this->expectExceptionMessage("Class doesn't have a slug field");
+        $this->expectException(InvalidFetchFieldsQueryException::class);
+
         $this->givenWeHaveAValidEntityAssignedToAManager(\TestNS\Slugless::class);
 
         $this->reader->buildQuery(
@@ -149,12 +151,11 @@ DQL
         );
     }
 
-    /**
-     * @expectedException \Tardigrades\SectionField\Service\InvalidFetchFieldsQueryException
-     * @expectedExceptionMessage Not selecting any fields
-     */
     public function testThatItFailsWhenNotSelectingFields(): void
     {
+        $this->expectExceptionMessage("Not selecting any fields");
+        $this->expectException(InvalidFetchFieldsQueryException::class);
+
         $this->givenWeHaveAValidEntityAssignedToAManager(\TestNS\Product::class);
 
         $this->reader->buildQuery(
@@ -166,11 +167,12 @@ DQL
     }
 
     /**
-     * @expectedException \Tardigrades\SectionField\Service\InvalidFetchFieldsQueryException
-     * @expectedExceptionMessage Could not find any of the fields
+     * @test
      */
     public function testThatItFailsWhenSelectingOnlyInvalidFields(): void
     {
+        $this->expectException(\Tardigrades\SectionField\Service\InvalidFetchFieldsQueryException::class);
+        $this->expectExceptionMessage("Could not find any of the fields");
         $this->givenWeHaveAValidEntityAssignedToAManager(\TestNS\Product::class);
 
         $this->reader->buildQuery(

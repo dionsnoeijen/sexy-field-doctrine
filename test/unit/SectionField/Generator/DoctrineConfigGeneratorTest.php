@@ -46,7 +46,7 @@ final class DoctrineConfigGeneratorTest extends TestCase
     /** @var DoctrineConfigGenerator */
     private $generator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->fieldManager = Mockery::mock(FieldManagerInterface::class);
         $this->fieldTypeManager = Mockery::mock(FieldTypeManagerInterface::class);

@@ -13,7 +13,8 @@ declare (strict_types=1);
 
 namespace Tardigrades\FieldType\Relationship\Generator;
 
-use Doctrine\Common\Inflector\Inflector;
+use Doctrine\Inflector\InflectorFactory;
+use Doctrine\Inflector\Language;
 use Tardigrades\Entity\FieldInterface;
 use Tardigrades\Entity\SectionInterface;
 use Tardigrades\FieldType\Generator\GeneratorInterface;
@@ -49,6 +50,9 @@ class DoctrineManyToOneGenerator implements GeneratorInterface
         }
 
         if ($fieldConfig['field']['kind'] === self::KIND) {
+
+            $inflector = InflectorFactory::createForLanguage(Language::ENGLISH)->build();
+
             $handle = $sectionConfig->getHandle();
             $from = $sectionManager->readByHandle($handle);
 
@@ -60,9 +64,9 @@ class DoctrineManyToOneGenerator implements GeneratorInterface
             $toVersion = $to->getVersion()->toInt() > 1 ? ('_' . $to->getVersion()->toInt()) : '';
 
             if (!empty($fieldConfig['field']['from-handle'])) {
-                $fromPluralHandle = Inflector::pluralize($fieldConfig['field']['from-handle']);
+                $fromPluralHandle = $inflector->pluralize($fieldConfig['field']['from-handle']);
             } else {
-                $fromPluralHandle = Inflector::pluralize((string)$handle) . $fromVersion;
+                $fromPluralHandle = $inflector->pluralize((string)$handle) . $fromVersion;
             }
 
             return Template::create(
