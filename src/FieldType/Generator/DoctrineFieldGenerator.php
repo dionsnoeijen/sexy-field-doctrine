@@ -34,7 +34,7 @@ class DoctrineFieldGenerator implements GeneratorInterface
 
         $asString = str_replace(
             '{{ handle }}',
-            $field->getConfig()->getHandle(),
+            (string) $field->getConfig()->getHandle(),
             $asString
         );
 
