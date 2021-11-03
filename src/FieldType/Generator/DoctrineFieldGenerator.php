@@ -21,7 +21,6 @@ use Tardigrades\SectionField\ValueObject\SectionConfig;
 
 class DoctrineFieldGenerator implements GeneratorInterface
 {
-
     private static $DOCTRINE_UNIQUE = 'unique';
     private static $DOCTRINE_NULLABLE = 'nullable';
 
