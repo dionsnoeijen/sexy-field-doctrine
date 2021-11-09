@@ -5686,12 +5686,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dionsnoeijen/sexy-field.git",
-                "reference": "567aa4797f7e071ba447ad3c7ecdb833426ac73f"
+                "reference": "e1096733245b996f64b86cc2c786f173e7cb9cd2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dionsnoeijen/sexy-field/zipball/567aa4797f7e071ba447ad3c7ecdb833426ac73f",
-                "reference": "567aa4797f7e071ba447ad3c7ecdb833426ac73f",
+                "url": "https://api.github.com/repos/dionsnoeijen/sexy-field/zipball/e1096733245b996f64b86cc2c786f173e7cb9cd2",
+                "reference": "e1096733245b996f64b86cc2c786f173e7cb9cd2",
                 "shasum": ""
             },
             "require": {
@@ -5718,6 +5718,7 @@
                 "phpunit/phpunit": "^7.0",
                 "squizlabs/php_codesniffer": "^3.2"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -5735,7 +5736,11 @@
                 }
             ],
             "description": "SexyField helps you build application structure and accompanying forms.",
-            "time": "2020-06-17T12:49:33+00:00"
+            "support": {
+                "issues": "https://github.com/dionsnoeijen/sexy-field/issues",
+                "source": "https://github.com/dionsnoeijen/sexy-field/tree/master"
+            },
+            "time": "2021-11-03T15:20:23+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -5957,5 +5962,6 @@
     "platform": {
         "php": "^7.4"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.0.0"
 }
