@@ -11,11 +11,11 @@
     }
   ],
   "require": {
-    "php": "^7.4",
-    "doctrine/orm": "^2.5.6",
-    "symfony/dependency-injection": "^4",
-    "symfony/yaml": "^4",
-    "symfony/config": "^4"
+    "php": "8.*",
+    "doctrine/orm": "^2.8",
+    "symfony/dependency-injection": "^5",
+    "symfony/yaml": "^5",
+    "symfony/config": "^5"
   },
   "autoload": {
     "psr-4": {
@@ -28,11 +28,10 @@
     }
   },
   "require-dev": {
-    "tardigrades/sexy-field": "dev-master",
-    "doctrine/doctrine-bundle": "^1.6",
-    "phpunit/phpunit": "^7.0",
+    "tardigrades/sexy-field": "dev-sym5",
+    "doctrine/doctrine-bundle": "^2.2",
+    "phpunit/phpunit": "^9",
     "mockery/mockery": "^1.0",
-    "mikey179/vfsstream": "^1.6",
-    "squizlabs/php_codesniffer": "^3.2"
+    "mikey179/vfsstream": "^1.6"
   }
 }

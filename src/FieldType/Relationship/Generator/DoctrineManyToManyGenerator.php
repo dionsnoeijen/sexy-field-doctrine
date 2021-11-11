@@ -13,7 +13,8 @@ declare (strict_types=1);
 
 namespace Tardigrades\FieldType\Relationship\Generator;
 
-use Doctrine\Common\Util\Inflector;
+use Doctrine\Inflector\InflectorFactory;
+use Doctrine\Inflector\Language;
 use Tardigrades\Entity\FieldInterface;
 use Tardigrades\Entity\SectionInterface;
 use Tardigrades\FieldType\Generator\GeneratorInterface;
@@ -30,6 +31,8 @@ class DoctrineManyToManyGenerator implements GeneratorInterface
 
     public static function generate(FieldInterface $field, TemplateDir $templateDir, ...$options): Template
     {
+        $inflector = InflectorFactory::createForLanguage(Language::ENGLISH)->build();
+
         $fieldConfig = $field->getConfig()->toArray();
 
         /** @var SectionManagerInterface $sectionManager */
@@ -74,14 +77,14 @@ class DoctrineManyToManyGenerator implements GeneratorInterface
                     [
                         'type' => $fieldConfig['field']['relationship-type'],
                         'owner' => $fieldConfig['field']['owner'],
-                        'toPluralHandle' => Inflector::pluralize(
+                        'toPluralHandle' => $inflector->pluralize(
                             $fieldConfig['field']['as'] ?? $fieldConfig['field']['to']
                         ) . $toVersion,
                         'toFullyQualifiedClassName' => $to
                             ->getConfig()
                             ->getFullyQualifiedClassName(),
                         'fromHandle' => (string)$fromHandle . $fromVersion,
-                        'fromPluralHandle' => Inflector::pluralize(
+                        'fromPluralHandle' => $inflector->pluralize(
                             (string)$fromHandle
                         ) . $fromVersion,
                         'fromFullyQualifiedClassName' => $sectionConfig
