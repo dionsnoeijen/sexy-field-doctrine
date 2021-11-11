@@ -1,7 +1,4 @@
-<many-to-many field="<?php echo $toPluralHandle; ?>" target-entity="<?php echo $toFullyQualifiedClassName; ?>"<?php
-    if ($type === 'bidirectional') {
-        echo ' ' . ($owner ? 'inversed' : 'mapped') . '-by="' . $fromPluralHandle . '"';
-    }?>>
+<many-to-many field="<?php echo $toPluralHandle; ?>" target-entity="<?php echo $toFullyQualifiedClassName; ?>"<?php if ($type === 'bidirectional') { echo ' ' . ($owner ? 'inversed' : 'mapped') . '-by="' . $fromPluralHandle . '"'; }?><?php if (!empty($fetch)) { echo " fetch=\"$fetch\""; } ?>>
 <?php if ($cascade) { ?>
     <cascade>
         <cascade-<?php echo $cascade; ?> />

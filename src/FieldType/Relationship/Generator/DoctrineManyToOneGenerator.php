@@ -79,7 +79,7 @@ class DoctrineManyToOneGenerator implements GeneratorInterface
                         'fromPluralHandle' => $fromPluralHandle,
                         'cascade' => $fieldConfig['field']['cascade'] ?? false,
                         'unique' => $unique ? 'true' : 'false',
-                        'nullable' => $nullable ? 'true' : 'false',
+                        'nullable' => $nullable ? 'true' : 'false'
                     ]
                 )
             );

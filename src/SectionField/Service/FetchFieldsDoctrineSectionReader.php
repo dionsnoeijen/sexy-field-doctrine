@@ -49,6 +49,18 @@ class FetchFieldsDoctrineSectionReader extends Doctrine implements ReadSectionIn
         return new \ArrayIterator($results);
     }
 
+    /**
+     * @throws NoEntityManagerFoundForSection
+     */
+    public function readMaybe(OptionsInterface $readOptions, SectionConfig $sectionConfig = null): \ArrayIterator
+    {
+        try {
+            return $this->read($readOptions, $sectionConfig);
+        } catch (EntryNotFoundException $exception) {
+            return new \ArrayIterator([]);
+        }
+    }
+
     public function flush(): void
     {
         if (!is_null($this->entityManager)) {

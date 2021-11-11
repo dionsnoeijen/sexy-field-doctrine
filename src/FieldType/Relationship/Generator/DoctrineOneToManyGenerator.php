@@ -47,6 +47,14 @@ class DoctrineOneToManyGenerator implements GeneratorInterface
             $toHandle = $fieldConfig['field']['as'] ?? $fieldConfig['field']['to'];
             $to = $sectionManager->readByHandle(Handle::fromString($fieldConfig['field']['to']));
 
+            $fetch = null;
+            if (!empty($fieldConfig['field']['generator']) &&
+                !empty($fieldConfig['field']['generator']['doctrine']) &&
+                !empty($fieldConfig['field']['generator']['doctrine']['fetch'])
+            ) {
+                $fetch = $fieldConfig['field']['generator']['doctrine']['fetch'];
+            }
+
             $fromVersion = $from->getVersion()->toInt() > 1 ? ('_' . $from->getVersion()->toInt()) : '';
             $toVersion = $to->getVersion()->toInt() > 1 ? ('_' . $to->getVersion()->toInt()) : '';
 
@@ -62,7 +70,8 @@ class DoctrineOneToManyGenerator implements GeneratorInterface
                         'fromHandle' => (string) $fromHandle, // Don't version this, it's mapped to the entity method.
                         'fromPluralHandle' => $inflector->pluralize((string) $handle) . $fromVersion,
                         'toHandle' => $toHandle . $toVersion,
-                        'cascade' => $fieldConfig['field']['cascade'] ?? false
+                        'cascade' => $fieldConfig['field']['cascade'] ?? false,
+                        'fetch' => $fetch
                     ]
                 )
             );

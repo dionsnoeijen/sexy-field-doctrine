@@ -50,6 +50,23 @@ class DoctrineSectionReader extends Doctrine implements ReadSectionInterface
      * @param OptionsInterface $readOptions
      * @param SectionConfig|null $sectionConfig
      * @return \ArrayIterator
+     * @throws NoEntityManagerFoundForSection
+     */
+    public function readMaybe(
+        OptionsInterface $readOptions,
+        SectionConfig $sectionConfig = null
+    ): \ArrayIterator {
+        try {
+            return $this->read($readOptions, $sectionConfig);
+        } catch (EntryNotFoundException $exception) {
+            return new \ArrayIterator([]);
+        }
+    }
+
+    /**
+     * @param OptionsInterface $readOptions
+     * @param SectionConfig|null $sectionConfig
+     * @return \ArrayIterator
      * @throws EntryNotFoundException
      * @throws NoEntityManagerFoundForSection
      */
